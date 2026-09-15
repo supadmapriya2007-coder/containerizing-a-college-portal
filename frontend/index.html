@@ -1,34 +1,75 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>College Portal</title>
-  <link rel="stylesheet" href="css/style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>College Portal</title>
+
+    <link rel="stylesheet" href="css/style.css">
 </head>
+
 <body>
-  <header>
-    <h1>College Portal</h1>
-    <p>Containerizing a College Portal</p>
-  </header>
 
-  <main class="container">
-    <section class="card">
-      <h2>Welcome</h2>
-      <p>This is the starter version of the College Portal.</p>
-      <div class="buttons">
-        <button onclick="showMessage('Student Portal selected')">Student Portal</button>
-        <button onclick="showMessage('Faculty Portal selected')">Faculty Portal</button>
-        <button onclick="showMessage('Admin Portal selected')">Admin Portal</button>
-      </div>
-      <p id="message"></p>
-    </section>
-  </main>
+    <header>
+        <h1>🎓 College Portal</h1>
 
-  <footer>
-    <p>College Portal &copy; 2026</p>
-  </footer>
+        <nav>
+            <a href="index.html">Home</a>
+            <a href="#">Student</a>
+            <a href="#">Faculty</a>
+            <a href="#">Admin</a>
+        </nav>
+    </header>
 
-  <script src="js/script.js"></script>
+    <main>
+
+        <section class="hero">
+            <h2>Welcome to College Portal</h2>
+
+            <p>
+                A centralized platform for students, faculty and administrators.
+            </p>
+
+            <button onclick="showMessage()">
+                Get Started
+            </button>
+        </section>
+
+        <section class="cards">
+
+            <div class="card">
+                <h3>👨‍🎓 Student Portal</h3>
+                <p>
+                    View courses, attendance, marks and college notices.
+                </p>
+                <button>Student Login</button>
+            </div>
+
+            <div class="card">
+                <h3>👩‍🏫 Faculty Portal</h3>
+                <p>
+                    Manage attendance, marks and student information.
+                </p>
+                <button>Faculty Login</button>
+            </div>
+
+            <div class="card">
+                <h3>🧑‍💼 Admin Portal</h3>
+                <p>
+                    Manage students, faculty, courses and announcements.
+                </p>
+                <button>Admin Login</button>
+            </div>
+
+        </section>
+
+    </main>
+
+    <footer>
+        <p>© 2026 College Portal | Containerizing a College Portal</p>
+    </footer>
+
+    <script src="js/script.js"></script>
+
 </body>
 </html>
