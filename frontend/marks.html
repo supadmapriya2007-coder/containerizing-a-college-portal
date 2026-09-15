@@ -23,46 +23,84 @@
         </nav>
     </header>
 
+
     <main>
 
         <section class="hero">
+
             <h2>My Marks</h2>
-            <p>View your internal and examination marks.</p>
+
+            <p>
+                Check your internal marks and examination results.
+            </p>
+
         </section>
 
-        <section class="cards">
 
-            <div class="card">
-                <h3>💻 Web Development</h3>
-                <p>Internal Mark: 85 / 100</p>
-                <button>View Result</button>
-            </div>
+        <!-- Marks will be loaded from the backend -->
 
-            <div class="card">
-                <h3>🗄️ Database Management</h3>
-                <p>Internal Mark: 78 / 100</p>
-                <button>View Result</button>
-            </div>
+        <section class="cards" id="marksList">
 
-            <div class="card">
-                <h3>🐳 Cloud Computing</h3>
-                <p>Internal Mark: 88 / 100</p>
-                <button>View Result</button>
-            </div>
-
-            <div class="card">
-                <h3>🔐 Cyber Security</h3>
-                <p>Internal Mark: 82 / 100</p>
-                <button>View Result</button>
-            </div>
+            <p>Loading marks...</p>
 
         </section>
 
     </main>
 
+
     <footer>
+
         <p>© 2026 College Portal | Marks</p>
+
     </footer>
+
+
+    <script>
+
+        fetch("http://localhost:3000/api/marks")
+
+            .then(response => response.json())
+
+            .then(marks => {
+
+                const marksList =
+                    document.getElementById("marksList");
+
+                marksList.innerHTML = "";
+
+                marks.forEach(item => {
+
+                    const card =
+                        document.createElement("div");
+
+                    card.className = "card";
+
+                    card.innerHTML = `
+                        <h3>📚 ${item.subject}</h3>
+
+                        <p>
+                            Mark: <strong>${item.mark}</strong> / 100
+                        </p>
+
+                        <button>
+                            View Result
+                        </button>
+                    `;
+
+                    marksList.appendChild(card);
+
+                });
+
+            })
+
+            .catch(error => {
+
+                document.getElementById("marksList").innerHTML =
+                    "<p>Backend server is not running.</p>";
+
+            });
+
+    </script>
 
 </body>
 
