@@ -1,121 +1,101 @@
 const http = require("http");
+const mysql = require("mysql2/promise");
 
-const students = [
-    {
-        id: 1,
-        name: "Student 1",
-        course: "Computer Science",
-        semester: 6
-    }
-];
+const db = mysql.createPool({
+    host: "database",
+    user: "root",
+    password: "rootpassword",
+    database: "college_portal"
+});
 
-const courses = [
-    {
-        code: "CS301",
-        name: "Web Development"
-    },
-    {
-        code: "CS302",
-        name: "Database Management"
-    },
-    {
-        code: "CS303",
-        name: "Cloud Computing"
-    },
-    {
-        code: "CS304",
-        name: "Cyber Security"
-    }
-];
-
-const marks = [
-    {
-        subject: "Web Development",
-        mark: 85
-    },
-    {
-        subject: "Database Management",
-        mark: 78
-    },
-    {
-        subject: "Cloud Computing",
-        mark: 88
-    },
-    {
-        subject: "Cyber Security",
-        mark: 82
-    }
-];
-
-const attendance = [
-    {
-        subject: "Web Development",
-        percentage: 92
-    },
-    {
-        subject: "Database Management",
-        percentage: 88
-    },
-    {
-        subject: "Cloud Computing",
-        percentage: 95
-    },
-    {
-        subject: "Cyber Security",
-        percentage: 90
-    }
-];
-
-const notices = [
-    {
-        title: "Semester Examination",
-        message: "The semester examination timetable will be published soon."
-    },
-    {
-        title: "College Event",
-        message: "Annual college cultural event registrations are now open."
-    }
-];
-
-const server = http.createServer((req, res) => {
+const server = http.createServer(async (req, res) => {
 
     res.writeHead(200, {
         "Content-Type": "application/json",
         "Access-Control-Allow-Origin": "*"
     });
 
-    if (req.url === "/api/students") {
-        res.end(JSON.stringify(students));
-    }
+    try {
 
-    else if (req.url === "/api/courses") {
-        res.end(JSON.stringify(courses));
-    }
+        if (req.url === "/api/students") {
 
-    else if (req.url === "/api/marks") {
-        res.end(JSON.stringify(marks));
-    }
+            const [rows] = await db.query(
+                "SELECT * FROM students"
+            );
 
-    else if (req.url === "/api/attendance") {
-        res.end(JSON.stringify(attendance));
-    }
+            res.end(JSON.stringify(rows));
 
-    else if (req.url === "/api/notices") {
-        res.end(JSON.stringify(notices));
-    }
+        } else if (req.url === "/api/courses") {
 
-    else {
+            const [rows] = await db.query(
+                "SELECT * FROM courses"
+            );
+
+            res.end(JSON.stringify(rows));
+
+        } else if (req.url === "/api/marks") {
+
+            const [rows] = await db.query(`
+                SELECT 
+                    courses.name AS subject,
+                    marks.mark
+                FROM marks
+                JOIN courses ON marks.course_id = courses.id
+            `);
+
+            res.end(JSON.stringify(rows));
+
+        } else if (req.url === "/api/attendance") {
+
+            const [rows] = await db.query(`
+                SELECT 
+                    courses.name AS subject,
+                    attendance.percentage
+                FROM attendance
+                JOIN courses ON attendance.course_id = courses.id
+            `);
+
+            res.end(JSON.stringify(rows));
+
+        } else if (req.url === "/api/notices") {
+
+            const [rows] = await db.query(
+                "SELECT * FROM notices"
+            );
+
+            res.end(JSON.stringify(rows));
+
+        } else {
+
+            res.end(JSON.stringify({
+                message: "College Portal Backend is working!",
+                database: "Connected",
+                availableAPIs: [
+                    "/api/students",
+                    "/api/courses",
+                    "/api/marks",
+                    "/api/attendance",
+                    "/api/notices"
+                ]
+            }));
+
+        }
+
+    } catch (error) {
+
+        console.error(error);
+
+        res.writeHead(500, {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*"
+        });
+
         res.end(JSON.stringify({
-            message: "College Portal Backend is working!",
-            availableAPIs: [
-                "/api/students",
-                "/api/courses",
-                "/api/marks",
-                "/api/attendance",
-                "/api/notices"
-            ]
+            error: "Database connection or query failed"
         }));
+
     }
+
 });
 
 const PORT = 3000;
