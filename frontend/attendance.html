@@ -27,39 +27,21 @@
     <main>
 
         <section class="hero">
+
             <h2>My Attendance</h2>
 
             <p>
                 Check your subject-wise attendance percentage.
             </p>
+
         </section>
 
 
-        <section class="cards">
+        <!-- Attendance will be loaded from the backend -->
 
-            <div class="card">
-                <h3>💻 Web Development</h3>
-                <p>Attendance: 92%</p>
-                <button>View Details</button>
-            </div>
+        <section class="cards" id="attendanceList">
 
-            <div class="card">
-                <h3>🗄️ Database Management</h3>
-                <p>Attendance: 88%</p>
-                <button>View Details</button>
-            </div>
-
-            <div class="card">
-                <h3>🐳 Cloud Computing</h3>
-                <p>Attendance: 95%</p>
-                <button>View Details</button>
-            </div>
-
-            <div class="card">
-                <h3>🔐 Cyber Security</h3>
-                <p>Attendance: 90%</p>
-                <button>View Details</button>
-            </div>
+            <p>Loading attendance...</p>
 
         </section>
 
@@ -67,8 +49,59 @@
 
 
     <footer>
+
         <p>© 2026 College Portal | Attendance</p>
+
     </footer>
+
+
+    <script>
+
+        fetch("http://localhost:3000/api/attendance")
+
+            .then(response => response.json())
+
+            .then(attendance => {
+
+                const attendanceList =
+                    document.getElementById("attendanceList");
+
+                attendanceList.innerHTML = "";
+
+                attendance.forEach(item => {
+
+                    const card =
+                        document.createElement("div");
+
+                    card.className = "card";
+
+                    card.innerHTML = `
+                        <h3>📚 ${item.subject}</h3>
+
+                        <p>
+                            Attendance:
+                            <strong>${item.percentage}%</strong>
+                        </p>
+
+                        <button>
+                            View Details
+                        </button>
+                    `;
+
+                    attendanceList.appendChild(card);
+
+                });
+
+            })
+
+            .catch(error => {
+
+                document.getElementById("attendanceList").innerHTML =
+                    "<p>Backend server is not running.</p>";
+
+            });
+
+    </script>
 
 </body>
 
