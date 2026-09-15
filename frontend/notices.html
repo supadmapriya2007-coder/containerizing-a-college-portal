@@ -1,84 +1,77 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <title>College Notices</title>
-
     <link rel="stylesheet" href="css/style.css">
 </head>
 
 <body>
 
-    <header>
-        <h1>📢 College Notices</h1>
+<header>
+    <h1>🎓 College Portal</h1>
 
-        <nav>
-            <a href="index.html">Home</a>
-            <a href="student.html">Student</a>
-            <a href="#">Faculty</a>
-            <a href="#">Admin</a>
-        </nav>
-    </header>
+    <nav>
+        <a href="index.html">Home</a>
+        <a href="student.html">Student</a>
+        <a href="#">Faculty</a>
+        <a href="#">Admin</a>
+    </nav>
+</header>
 
-    <main>
+<main>
 
-        <section class="hero">
-            <h2>Latest Notices</h2>
+    <section class="hero">
+        <h2>📢 College Notices</h2>
+        <p>Latest announcements and important college information.</p>
+    </section>
 
-            <p>
-                Stay updated with the latest college announcements.
-            </p>
-        </section>
+    <section class="cards" id="noticeList">
+        <p>Loading notices...</p>
+    </section>
 
-        <section class="cards">
+</main>
 
-            <div class="card">
-                <h3>📅 Semester Examination</h3>
-                <p>
-                    The semester examination timetable will be
-                    published soon.
-                </p>
+<footer>
+    <p>© 2026 College Portal | Containerizing a College Portal</p>
+</footer>
+
+<script>
+
+fetch("http://localhost:3000/api/notices")
+    .then(response => response.json())
+    .then(notices => {
+
+        const noticeList = document.getElementById("noticeList");
+
+        noticeList.innerHTML = "";
+
+        notices.forEach(notice => {
+
+            const card = document.createElement("div");
+
+            card.className = "card";
+
+            card.innerHTML = `
+                <h3>📢 ${notice.title}</h3>
+                <p>${notice.message}</p>
                 <button>Read More</button>
-            </div>
+            `;
 
-            <div class="card">
-                <h3>🎉 College Event</h3>
-                <p>
-                    Annual college cultural event registrations
-                    are now open.
-                </p>
-                <button>Read More</button>
-            </div>
+            noticeList.appendChild(card);
 
-            <div class="card">
-                <h3>📚 Assignment Submission</h3>
-                <p>
-                    Students must submit their assignments before
-                    the announced deadline.
-                </p>
-                <button>Read More</button>
-            </div>
+        });
 
-            <div class="card">
-                <h3>🏫 Holiday Notice</h3>
-                <p>
-                    Students are requested to check the academic
-                    calendar for upcoming holidays.
-                </p>
-                <button>Read More</button>
-            </div>
+    })
+    .catch(error => {
 
-        </section>
+        document.getElementById("noticeList").innerHTML =
+            "<p>Backend server is not running.</p>";
 
-    </main>
+    });
 
-    <footer>
-        <p>© 2026 College Portal | Notices</p>
-    </footer>
+</script>
 
 </body>
-
 </html>

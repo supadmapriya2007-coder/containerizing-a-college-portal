@@ -37,31 +37,11 @@
         </section>
 
 
-        <section class="cards">
+        <!-- Courses will be loaded from the backend -->
 
-            <div class="card">
-                <h3>💻 Web Development</h3>
-                <p>Course Code: CS301</p>
-                <button>View Course</button>
-            </div>
+        <section class="cards" id="courseList">
 
-            <div class="card">
-                <h3>🗄️ Database Management</h3>
-                <p>Course Code: CS302</p>
-                <button>View Course</button>
-            </div>
-
-            <div class="card">
-                <h3>🐳 Cloud Computing</h3>
-                <p>Course Code: CS303</p>
-                <button>View Course</button>
-            </div>
-
-            <div class="card">
-                <h3>🔐 Cyber Security</h3>
-                <p>Course Code: CS304</p>
-                <button>View Course</button>
-            </div>
+            <p>Loading courses...</p>
 
         </section>
 
@@ -73,6 +53,54 @@
         <p>© 2026 College Portal | Courses</p>
 
     </footer>
+
+
+    <script>
+
+        fetch("http://localhost:3000/api/courses")
+
+            .then(response => response.json())
+
+            .then(courses => {
+
+                const courseList =
+                    document.getElementById("courseList");
+
+                courseList.innerHTML = "";
+
+                courses.forEach(course => {
+
+                    const card =
+                        document.createElement("div");
+
+                    card.className = "card";
+
+                    card.innerHTML = `
+                        <h3>📚 ${course.name}</h3>
+
+                        <p>
+                            Course Code: ${course.code}
+                        </p>
+
+                        <button>
+                            View Course
+                        </button>
+                    `;
+
+                    courseList.appendChild(card);
+
+                });
+
+            })
+
+            .catch(error => {
+
+                document.getElementById("courseList").innerHTML =
+                    "<p>Backend server is not running.</p>";
+
+            });
+
+    </script>
 
 </body>
 
